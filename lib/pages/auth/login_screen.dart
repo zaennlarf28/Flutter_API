@@ -1,71 +1,103 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, use_key_in_widget_constructors
-
-import 'package:flutter_api/pages/auth/register_screen.dart';
-import 'package:flutter_api/pages/home_screen.dart';
-import 'package:flutter_api/services/auth_service.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_api/pages/auth/register_screen.dart';
+import 'package:flutter_api/pages/menu_screen.dart';
+import 'package:flutter_api/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-
-  final passwordController = TextEditingController();
-
-  final AuthService authService = AuthService();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+      backgroundColor: Color(0xFFF5F5F5),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Card(
+              elevation: 8,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      obscureText: true,
+                    ),
+                    SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          bool success = await _authService.login(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          );
+                          if (success) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => MenuScreen()),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Login Gagal')),
+                            );
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Text('Login', style: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => RegisterScreen()),
+                        );
+                      },
+                      child: Text('Belum punya akun? Daftar di sini'),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                bool success = await authService.login(
-                  emailController.text,
-                  passwordController.text,
-                );
-
-                if (success) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Login failed')),
-                  );
-                }
-              },
-              child: Text('Login'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterScreen()),
-                );
-              },
-              child: Text('Don\'t have an account? Register'),
-            ),
-          ],
+          ),
         ),
       ),
     );
