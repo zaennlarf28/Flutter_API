@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api/models/post_model.dart';
-import 'package:flutter_api/services/post_service.dart';
-// import 'package:flutter_api/pages/post/post_detail_screen.dart'; // Uncomment when PostDetailScreen is available
+import 'package:flutter_api/models/produk_model.dart';
+import 'package:flutter_api/services/produk_service.dart';
+import 'produk_detail_screen.dart';
 
-class ListPostScreen extends StatefulWidget {
-  const ListPostScreen({super.key});
+class ProdukListScreen extends StatefulWidget {
+  const ProdukListScreen({super.key});
 
   @override
-  State<ListPostScreen> createState() => _ListPostScreenState();
+  State<ProdukListScreen> createState() => _ProdukListScreenState();
 }
 
-class _ListPostScreenState extends State<ListPostScreen> {
-  late Future<List<PostModel>> _postList;
+class _ProdukListScreenState extends State<ProdukListScreen> {
+  late Future<List<ProdukModel>> _produkList;
   final TextEditingController _searchController = TextEditingController();
-  List<PostModel> _filteredPostList = [];
+  List<ProdukModel> _filteredProdukList = [];
 
   @override
   void initState() {
     super.initState();
-    _postList = PostService.listPost();
+    _produkList = ProdukService.getProdukList();
   }
 
   @override
@@ -27,36 +27,37 @@ class _ListPostScreenState extends State<ListPostScreen> {
     super.dispose();
   }
 
-  void _filterPosts(String query, List<PostModel> postList) {
+  void _filterProduk(String query, List<ProdukModel> produkList) {
     setState(() {
-      _filteredPostList = postList
-          .where((post) => post.title.toLowerCase().contains(query.toLowerCase()))
+      _filteredProdukList = produkList
+          .where((produk) =>
+              produk.title.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
-  Future<void> _refreshPostList() async {
+  Future<void> _refreshProdukList() async {
     setState(() {
-      _postList = PostService.listPost();
+      _produkList = ProdukService.getProdukList();
       _searchController.clear();
-      _filteredPostList = [];
+      _filteredProdukList = [];
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA), // Light blue-grey background
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
         title: const Text(
-          'Daftar Postingan',
+          'Daftar Produk',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
             color: Colors.white,
           ),
         ),
-        backgroundColor: const Color(0xFF1E88E5), // Blue theme
+        backgroundColor: const Color(0xFF1E88E5),
         elevation: 0,
         centerTitle: true,
       ),
@@ -64,11 +65,12 @@ class _ListPostScreenState extends State<ListPostScreen> {
         children: [
           // Search Bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Cari postingan...',
+                hintText: 'Cari produk...',
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 filled: true,
                 fillColor: Colors.white,
@@ -79,18 +81,18 @@ class _ListPostScreenState extends State<ListPostScreen> {
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
               ),
               onChanged: (query) async {
-                final postList = await _postList;
-                _filterPosts(query, postList);
+                final produkList = await _produkList;
+                _filterProduk(query, produkList);
               },
             ),
           ),
-          // Post List
+          // Produk List
           Expanded(
             child: RefreshIndicator(
-              onRefresh: _refreshPostList,
-              color: const Color(0xFF1E88E5), // Blue refresh indicator
-              child: FutureBuilder<List<PostModel>>(
-                future: _postList,
+              onRefresh: _refreshProdukList,
+              color: const Color(0xFF1E88E5),
+              child: FutureBuilder<List<ProdukModel>>(
+                future: _produkList,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -113,7 +115,7 @@ class _ListPostScreenState extends State<ListPostScreen> {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(
                       child: Text(
-                        "Tidak ada postingan.",
+                        "Tidak ada produk.",
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey,
@@ -122,16 +124,16 @@ class _ListPostScreenState extends State<ListPostScreen> {
                     );
                   }
 
-                  final postList = _searchController.text.isNotEmpty
-                      ? _filteredPostList
+                  final produkList = _searchController.text.isNotEmpty
+                      ? _filteredProdukList
                       : snapshot.data!;
 
                   return ListView.builder(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
-                    itemCount: postList.length,
+                    itemCount: produkList.length,
                     itemBuilder: (context, index) {
-                      final post = postList[index];
+                      final produk = produkList[index];
                       return AnimatedOpacity(
                         opacity: 1.0,
                         duration: const Duration(milliseconds: 300),
@@ -144,44 +146,37 @@ class _ListPostScreenState extends State<ListPostScreen> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(16.0),
                             onTap: () {
-                              // Uncomment when PostDetailScreen is available
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => PostDetailScreen(
-                              //       id: post.id.toString(),
-                              //       title: post.title,
-                              //       body: post.body,
-                              //       userId: post.userId.toString(),
-                              //     ),
-                              //   ),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProdukDetailScreen(produk: produk),
+                                ),
+                              );
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
                                 children: [
-                                  // Post Avatar
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: const Color(0xFFBBDEFB), // Light blue
-                                    child: Text(
-                                      post.id.toString(),
-                                      style: const TextStyle(
-                                        color: Color(0xFF1E88E5), // Blue text
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  // Thumbnail
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      produk.thumbnail,
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                   const SizedBox(width: 16.0),
-                                  // Post Details
+                                  // Produk Details
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          post.title,
+                                          produk.title,
                                           style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600,
@@ -192,21 +187,11 @@ class _ListPostScreenState extends State<ListPostScreen> {
                                         ),
                                         const SizedBox(height: 4.0),
                                         Text(
-                                          'User ID: ${post.userId}',
+                                          "Rp ${produk.price}",
                                           style: TextStyle(
                                             fontSize: 14,
-                                            color: Colors.grey[600],
+                                            color: Colors.grey[700],
                                           ),
-                                        ),
-                                        const SizedBox(height: 4.0),
-                                        Text(
-                                          post.body,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[600],
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
                                     ),

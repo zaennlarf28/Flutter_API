@@ -11,7 +11,7 @@ class QuranDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(surah.nama ?? 'Detail Surah'),
-        backgroundColor: const Color(0xFF2E7D32),
+        backgroundColor: const Color(0xFF1E88E5),
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
@@ -30,7 +30,7 @@ class QuranDetailScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2E7D32),
+                      color: Color(0xFF1E88E5),
                     ),
                   ),
                 ),
