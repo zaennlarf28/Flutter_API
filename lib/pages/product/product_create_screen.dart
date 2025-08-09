@@ -43,38 +43,115 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
     if (success) {
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Failed to create product")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to create product")),
+      );
     }
+  }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.white70),
+      filled: true,
+      fillColor: const Color(0xFF1C1C1E),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide.none,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Create Product")),
+      backgroundColor: const Color(0xFF121212), // Dark background
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1C1C1E),
+        title: const Text("Create Product",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             children: [
               TextField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: "Name"),
+                style: const TextStyle(color: Colors.white),
+                decoration: _inputDecoration("Name"),
               ),
+              const SizedBox(height: 14),
               TextField(
                 controller: _descController,
-                decoration: InputDecoration(labelText: "Description"),
+                style: const TextStyle(color: Colors.white),
+                maxLines: 3,
+                decoration: _inputDecoration("Description"),
               ),
+              const SizedBox(height: 14),
               TextField(
                 controller: _priceController,
-                decoration: InputDecoration(labelText: "Price"),
+                style: const TextStyle(color: Colors.white),
                 keyboardType: TextInputType.number,
+                decoration: _inputDecoration("Price"),
               ),
-              ElevatedButton(onPressed: pickImage, child: Text("Pick Image")),
-              if (_imageBytes != null) Image.memory(_imageBytes!, height: 100),
-              SizedBox(height: 20),
-              ElevatedButton(onPressed: submit, child: Text("Submit")),
+              const SizedBox(height: 20),
+
+              // Tombol pilih gambar
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2C2C2E),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  icon: const Icon(Icons.image_outlined),
+                  label: const Text(
+                    "Pick Image",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  onPressed: pickImage,
+                ),
+              ),
+
+              if (_imageBytes != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 14),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.memory(_imageBytes!, height: 150, fit: BoxFit.cover),
+                  ),
+                ),
+
+              const SizedBox(height: 24),
+
+              // Tombol submit modern
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF3A3AFA), // Biru premium
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 3,
+                  ),
+                  onPressed: submit,
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

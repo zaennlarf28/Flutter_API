@@ -52,7 +52,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA), // Light blue-grey background
+      backgroundColor: const Color(0xFF121212), // Dark background
       appBar: AppBar(
         title: const Text(
           'Products',
@@ -62,7 +62,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: const Color(0xFF1E88E5), // Blue theme
+        backgroundColor: const Color(0xFF1E1E1E), // Dark AppBar
         elevation: 0,
         centerTitle: true,
       ),
@@ -74,21 +74,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
             context,
             MaterialPageRoute(builder: (_) => ProductCreateScreen()),
           );
-          _refreshProducts(); // Refresh after returning
+          _refreshProducts();
         },
       ),
       body: Column(
         children: [
           // Search Bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
+              style: const TextStyle(color: Colors.white),
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search products...',
+                hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: const Color(0xFF1E1E1E),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
                   borderSide: BorderSide.none,
@@ -122,7 +125,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       child: Text(
                         "Error: ${snapshot.error}",
                         style: const TextStyle(
-                          color: Color(0xFFD32F2F),
+                          color: Colors.redAccent,
                           fontSize: 16,
                         ),
                       ),
@@ -153,6 +156,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         opacity: 1.0,
                         duration: const Duration(milliseconds: 300),
                         child: Card(
+                          color: const Color(0xFF1E1E1E), // Dark card
                           elevation: 3,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
@@ -168,7 +172,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                       productId: product.id),
                                 ),
                               );
-                              _refreshProducts(); // Refresh after returning
+                              _refreshProducts();
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -186,7 +190,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                           Container(
                                         width: 80,
                                         height: 80,
-                                        color: Colors.grey[300],
+                                        color: Colors.grey[800],
                                         child: const Icon(
                                           Icons.image_not_supported,
                                           color: Colors.grey,
@@ -206,7 +210,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                           style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600,
-                                            color: Colors.black87,
+                                            color: Colors.white,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -223,9 +227,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                         const SizedBox(height: 4.0),
                                         Text(
                                           product.description ?? '',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 14,
-                                            color: Colors.grey[600],
+                                            color: Colors.grey,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,

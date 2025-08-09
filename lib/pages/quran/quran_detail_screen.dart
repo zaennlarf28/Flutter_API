@@ -9,39 +9,55 @@ class QuranDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF121212), // Dark background
       appBar: AppBar(
-        title: Text(surah.nama ?? 'Detail Surah'),
-        backgroundColor: const Color(0xFF1E88E5),
+        backgroundColor:Colors.grey[900],
         foregroundColor: Colors.white,
+        title: Text(
+          surah.nama ?? 'Detail Surah',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          elevation: 3,
+          color: const Color(0xFF1E1E1E), // Dark card
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 4,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Judul
                 Center(
                   child: Text(
                     surah.nama ?? '-',
                     style: const TextStyle(
-                      fontSize: 24,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E88E5),
+                      color: Color(0xFF1E88E5), // Blue accent
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 Center(
                   child: Text(
                     surah.asma ?? '-',
-                    style: const TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.white70,
+                    ),
                   ),
                 ),
-                const Divider(height: 30, color: Colors.grey),
+                const SizedBox(height: 20),
+                const Divider(height: 1, color: Colors.white24),
+                const SizedBox(height: 12),
 
                 // Detail Rows
                 detailItem('Nomor', surah.nomor),
@@ -71,7 +87,7 @@ class QuranDetailScreen extends StatelessWidget {
               '$label:',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Colors.white,
               ),
             ),
           ),
@@ -80,7 +96,8 @@ class QuranDetailScreen extends StatelessWidget {
             child: Text(
               value ?? '-',
               style: const TextStyle(
-                color: Colors.black87,
+                color: Colors.white70,
+                height: 1.4, // biar rapi kalau keterangan panjang
               ),
             ),
           ),

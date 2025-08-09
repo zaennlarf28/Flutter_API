@@ -47,7 +47,7 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: const Color(0xFF121212), // Dark background
       appBar: AppBar(
         title: const Text(
           'Daftar Produk',
@@ -57,7 +57,7 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: const Color(0xFF1E88E5),
+        backgroundColor: const Color(0xFF1E1E1E), // Dark AppBar
         elevation: 0,
         centerTitle: true,
       ),
@@ -68,12 +68,14 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
+              style: const TextStyle(color: Colors.white),
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Cari produk...',
+                hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: const Color(0xFF1E1E1E),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
                   borderSide: BorderSide.none,
@@ -90,7 +92,7 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: _refreshProdukList,
-              color: const Color(0xFF1E88E5),
+              color: const Color(0xFF1E88E5), // Blue refresh indicator
               child: FutureBuilder<List<ProdukModel>>(
                 future: _produkList,
                 builder: (context, snapshot) {
@@ -107,7 +109,7 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
                       child: Text(
                         "Error: ${snapshot.error}",
                         style: const TextStyle(
-                          color: Color(0xFFD32F2F),
+                          color: Colors.redAccent,
                           fontSize: 16,
                         ),
                       ),
@@ -138,6 +140,7 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
                         opacity: 1.0,
                         duration: const Duration(milliseconds: 300),
                         child: Card(
+                          color: const Color(0xFF1E1E1E), // Dark card
                           elevation: 3,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
@@ -166,6 +169,16 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
                                       width: 60,
                                       height: 60,
                                       fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) =>
+                                          Container(
+                                        width: 60,
+                                        height: 60,
+                                        color: Colors.grey[800],
+                                        child: const Icon(
+                                          Icons.image_not_supported,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 16.0),
@@ -180,7 +193,7 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
                                           style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600,
-                                            color: Colors.black87,
+                                            color: Colors.white,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -188,9 +201,10 @@ class _ProdukListScreenState extends State<ProdukListScreen> {
                                         const SizedBox(height: 4.0),
                                         Text(
                                           "Rp ${produk.price}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 14,
-                                            color: Colors.grey[700],
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF1E88E5),
                                           ),
                                         ),
                                       ],

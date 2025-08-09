@@ -48,19 +48,16 @@ class _ListQuranScreenState extends State<ListQuranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA), // Light blue-grey background
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text(
           'Daftar Surah',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-        backgroundColor: const Color(0xFF1E88E5), // Blue theme
-        elevation: 0,
+        backgroundColor: Colors.grey[900],
+        foregroundColor: Colors.white,
         centerTitle: true,
+        elevation: 0,
       ),
       body: Column(
         children: [
@@ -69,14 +66,20 @@ class _ListQuranScreenState extends State<ListQuranScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
               controller: _searchController,
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Cari surah atau arti...',
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                prefixIcon: Icon(Icons.search, color: Colors.grey[300]),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: Colors.grey[850],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide.none,
+                  borderSide: BorderSide(color: Colors.grey[700]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(color: Colors.grey[500]!, width: 2),
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
               ),
@@ -90,37 +93,28 @@ class _ListQuranScreenState extends State<ListQuranScreen> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: _refreshQuranList,
-              color: const Color(0xFF1E88E5), // Blue refresh indicator
+              color: Colors.white,
+              backgroundColor: Colors.grey[900],
               child: FutureBuilder<List<QuranModel>>(
                 future: _quranList,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFF1E88E5),
-                        ),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     );
                   } else if (snapshot.hasError) {
                     return Center(
                       child: Text(
                         "Terjadi kesalahan: ${snapshot.error}",
-                        style: const TextStyle(
-                          color: Color(0xFFD32F2F),
-                          fontSize: 16,
-                        ),
+                        style: const TextStyle(color: Colors.redAccent, fontSize: 16),
                       ),
                     );
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(
-                      child: Text(
-                        "Tidak ada surah.",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
+                      child: Text("Tidak ada surah.",
+                          style: TextStyle(fontSize: 16, color: Colors.grey)),
                     );
                   }
 
@@ -129,92 +123,77 @@ class _ListQuranScreenState extends State<ListQuranScreen> {
                       : snapshot.data!;
 
                   return ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     itemCount: quranList.length,
                     itemBuilder: (context, index) {
                       final surah = quranList[index];
-                      return AnimatedOpacity(
-                        opacity: 1.0,
-                        duration: const Duration(milliseconds: 300),
-                        child: Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          margin: const EdgeInsets.only(bottom: 12.0),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(16.0),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      QuranDetailScreen(surah: surah),
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                children: [
-                                  // Surah Number Avatar
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: const Color(0xFFBBDEFB), // Light blue
-                                    child: Text(
-                                      surah.nomor ?? '-',
-                                      style: const TextStyle(
-                                        color: Color(0xFF1E88E5), // Blue text
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                      return Card(
+                        color: Colors.grey[850],
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                          side: BorderSide(color: Colors.grey[700]!, width: 1),
+                        ),
+                        margin: const EdgeInsets.only(bottom: 12.0),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16.0),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QuranDetailScreen(surah: surah),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              children: [
+                                // Surah Number Avatar
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.grey[700],
+                                  child: Text(
+                                    surah.nomor ?? '-',
+                                    style: const TextStyle(
+                                        color: Colors.white, fontWeight: FontWeight.bold),
                                   ),
-                                  const SizedBox(width: 16.0),
-                                  // Surah Details
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          surah.nama ?? '-',
-                                          style: const TextStyle(
+                                ),
+                                const SizedBox(width: 16.0),
+                                // Surah Details
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        surah.nama ?? '-',
+                                        style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600,
-                                            color: Colors.black87,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4.0),
-                                        Text(
-                                          'Arti: ${surah.arti ?? '-'}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[600],
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4.0),
-                                        Text(
-                                          'Jumlah Ayat: ${surah.ayat ?? 0}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[600],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                            color: Colors.white),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        'Arti: ${surah.arti ?? '-'}',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.grey[400]),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        'Jumlah Ayat: ${surah.ayat ?? 0}',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.grey[500]),
+                                      ),
+                                    ],
                                   ),
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ],
-                              ),
+                                ),
+                                Icon(Icons.arrow_forward_ios,
+                                    size: 16, color: Colors.grey[400]),
+                              ],
                             ),
                           ),
                         ),

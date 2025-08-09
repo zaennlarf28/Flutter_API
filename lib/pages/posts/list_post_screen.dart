@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_api/models/post_model.dart';
 import 'package:flutter_api/services/post_service.dart';
-// import 'package:flutter_api/pages/post/post_detail_screen.dart'; // Uncomment when PostDetailScreen is available
 
 class ListPostScreen extends StatefulWidget {
   const ListPostScreen({super.key});
@@ -30,7 +29,8 @@ class _ListPostScreenState extends State<ListPostScreen> {
   void _filterPosts(String query, List<PostModel> postList) {
     setState(() {
       _filteredPostList = postList
-          .where((post) => post.title.toLowerCase().contains(query.toLowerCase()))
+          .where((post) =>
+              post.title.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -46,17 +46,17 @@ class _ListPostScreenState extends State<ListPostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA), // Light blue-grey background
+      backgroundColor: Colors.black, // background hitam
       appBar: AppBar(
         title: const Text(
           'Daftar Postingan',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
-            color: Colors.white,
+            color: Colors.white, // putih
           ),
         ),
-        backgroundColor: const Color(0xFF1E88E5), // Blue theme
+        backgroundColor: Colors.grey[900], // abu gelap
         elevation: 0,
         centerTitle: true,
       ),
@@ -64,17 +64,24 @@ class _ListPostScreenState extends State<ListPostScreen> {
         children: [
           // Search Bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
+              style: const TextStyle(color: Colors.white),
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Cari postingan...',
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                prefixIcon: Icon(Icons.search, color: Colors.grey[300]),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: Colors.grey[850], // abu gelap
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide.none,
+                  borderSide: BorderSide(color: Colors.grey[700]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(color: Colors.grey[500]!, width: 2),
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
               ),
@@ -88,16 +95,16 @@ class _ListPostScreenState extends State<ListPostScreen> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: _refreshPostList,
-              color: const Color(0xFF1E88E5), // Blue refresh indicator
+              color: Colors.white,
+              backgroundColor: Colors.grey[900],
               child: FutureBuilder<List<PostModel>>(
                 future: _postList,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFF1E88E5),
-                        ),
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     );
                   } else if (snapshot.hasError) {
@@ -105,7 +112,7 @@ class _ListPostScreenState extends State<ListPostScreen> {
                       child: Text(
                         "Error: ${snapshot.error}",
                         style: const TextStyle(
-                          color: Color(0xFFD32F2F),
+                          color: Colors.redAccent,
                           fontSize: 16,
                         ),
                       ),
@@ -132,92 +139,79 @@ class _ListPostScreenState extends State<ListPostScreen> {
                     itemCount: postList.length,
                     itemBuilder: (context, index) {
                       final post = postList[index];
-                      return AnimatedOpacity(
-                        opacity: 1.0,
-                        duration: const Duration(milliseconds: 300),
-                        child: Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          margin: const EdgeInsets.only(bottom: 12.0),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(16.0),
-                            onTap: () {
-                              // Uncomment when PostDetailScreen is available
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => PostDetailScreen(
-                              //       id: post.id.toString(),
-                              //       title: post.title,
-                              //       body: post.body,
-                              //       userId: post.userId.toString(),
-                              //     ),
-                              //   ),
-                              // );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                children: [
-                                  // Post Avatar
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: const Color(0xFFBBDEFB), // Light blue
-                                    child: Text(
-                                      post.id.toString(),
-                                      style: const TextStyle(
-                                        color: Color(0xFF1E88E5), // Blue text
-                                        fontWeight: FontWeight.bold,
+                      return Card(
+                        color: Colors.grey[850], // kartu abu gelap
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                          side: BorderSide(color: Colors.grey[700]!, width: 1),
+                        ),
+                        margin: const EdgeInsets.only(bottom: 12.0),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16.0),
+                          onTap: () {
+                            // Navigator.push(...);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              children: [
+                                // Post Avatar
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.grey[700],
+                                  child: Text(
+                                    post.id.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 16.0),
+                                // Post Details
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        post.title,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16.0),
-                                  // Post Details
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          post.title,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black87,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        'User ID: ${post.userId}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[400],
                                         ),
-                                        const SizedBox(height: 4.0),
-                                        Text(
-                                          'User ID: ${post.userId}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[600],
-                                          ),
+                                      ),
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        post.body,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[500],
                                         ),
-                                        const SizedBox(height: 4.0),
-                                        Text(
-                                          post.body,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[600],
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ),
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ],
-                              ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                  color: Colors.grey[400],
+                                ),
+                              ],
                             ),
                           ),
                         ),

@@ -31,13 +31,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: const Color(0xFF121212), // background gelap
       appBar: AppBar(
         title: const Text(
           "Profil Saya",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFF1E88E5),
+        backgroundColor: const Color(0xFF1E1E1E),
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
@@ -52,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.blue.withOpacity(0.2),
+                    color: Colors.blue.withOpacity(0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
@@ -60,8 +60,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               child: CircleAvatar(
                 radius: 55,
-                backgroundColor: Colors.blue.shade100,
-                child: const Icon(Icons.person, size: 65, color: Colors.blue),
+                backgroundColor: Colors.blue.shade900,
+                child: const Icon(Icons.person, size: 65, color: Colors.blueAccent),
               ),
             ),
             const SizedBox(height: 16),
@@ -72,17 +72,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Colors.white,
               ),
             ),
             Text(
               _user!['email'],
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              style: TextStyle(fontSize: 16, color: Colors.grey[400]),
             ),
             const SizedBox(height: 30),
 
             // Info Card
             Card(
+              color: const Color(0xFF1E1E1E), // card gelap
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -90,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   _infoTile(Icons.email, "Email", _user!['email']),
-                  const Divider(height: 1),
+                  Divider(height: 1, color: Colors.grey[800]),
                   _infoTile(
                     Icons.calendar_today,
                     "Tanggal Daftar",
@@ -116,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: Colors.red.shade700,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -135,16 +136,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _infoTile(IconData icon, String title, String value) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: const Color(0xFFBBDEFB),
-        child: Icon(icon, color: const Color(0xFF1E88E5)),
+        backgroundColor: Colors.blueGrey.shade800,
+        child: Icon(icon, color: Colors.blueAccent),
       ),
       title: Text(
         title,
-        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+          color: Colors.white,
+        ),
       ),
       subtitle: Text(
         value,
-        style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+        style: TextStyle(fontSize: 14, color: Colors.grey[400]),
       ),
     );
   }

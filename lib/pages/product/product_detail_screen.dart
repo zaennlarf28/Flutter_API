@@ -9,7 +9,7 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: const Color(0xFF121212), // Dark background
       appBar: AppBar(
         title: const Text(
           'Product Detail',
@@ -19,7 +19,7 @@ class ProductDetailScreen extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        backgroundColor: const Color(0xFF1E88E5),
+        backgroundColor: const Color(0xFF1E1E1E),
         elevation: 0,
         centerTitle: true,
       ),
@@ -40,22 +40,26 @@ class ProductDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Product Image (no crop)
                 Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.0),
-                    child: Image.network(
-                      'http://127.0.0.1:8000/storage/${product.image}',
-                      height: 220,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
+                    child: Container(
+                      color: Colors.black, // Background for empty space
+                      child: Image.network(
+                        'http://127.0.0.1:8000/storage/${product.image}',
                         height: 220,
-                        color: Colors.grey[300],
-                        child: const Center(
-                          child: Icon(
-                            Icons.broken_image,
-                            size: 60,
-                            color: Colors.grey,
+                        width: double.infinity,
+                        fit: BoxFit.contain, // No cropping
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          height: 220,
+                          color: Colors.grey[900],
+                          child: const Center(
+                            child: Icon(
+                              Icons.broken_image,
+                              size: 60,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -63,15 +67,19 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
+
+                // Product Name
                 Text(
                   product.name,
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 10),
+
+                // Price
                 Text(
                   'Rp ${product.price.toStringAsFixed(0)}',
                   style: const TextStyle(
@@ -81,19 +89,23 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
+
+                // Description
                 Text(
                   product.description ?? 'No description available.',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
-                    color: Colors.grey[700],
+                    color: Colors.grey,
                   ),
                 ),
                 const SizedBox(height: 30),
+
+                // Action Buttons
                 Row(
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        icon: const Icon(Icons.edit),
+                        icon: const Icon(Icons.edit, color: Colors.white),
                         label: const Text("Edit"),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF1E88E5),
@@ -117,7 +129,7 @@ class ProductDetailScreen extends StatelessWidget {
                     const SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton.icon(
-                        icon: const Icon(Icons.delete),
+                        icon: const Icon(Icons.delete, color: Colors.white),
                         label: const Text("Delete"),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent,
@@ -131,20 +143,31 @@ class ProductDetailScreen extends StatelessWidget {
                           final confirm = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text("Confirm Deletion"),
+                              backgroundColor: const Color(0xFF1E1E1E),
+                              title: const Text(
+                                "Confirm Deletion",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               content: const Text(
-                                  "Are you sure you want to delete this product?"),
+                                "Are you sure you want to delete this product?",
+                                style: TextStyle(color: Colors.white70),
+                              ),
                               actions: [
                                 TextButton(
-                                  child: const Text("Cancel"),
-                                  onPressed: () => Navigator.pop(context, false),
+                                  child: const Text(
+                                    "Cancel",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
                                 ),
                                 ElevatedButton(
                                   child: const Text("Delete"),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.redAccent,
                                   ),
-                                  onPressed: () => Navigator.pop(context, true),
+                                  onPressed: () =>
+                                      Navigator.pop(context, true),
                                 ),
                               ],
                             ),
